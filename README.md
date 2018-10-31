@@ -13,3 +13,9 @@ go get -u github.com/pocket7878/moonify
 ```
 ./moonify <image_file> <width> <height>
 ```
+
+## TODO
+
+- [ ] Add examples
+- [ ] Add text moonify
+- [ ] Add live camera support.
