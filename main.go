@@ -3,6 +3,7 @@ package main // import "github.com/pocket7878/moonify"
 import (
 	"bufio"
 	"fmt"
+	"gocv.io/x/gocv"
 	"image"
 	"image/color"
 	"image/gif"
@@ -64,16 +65,26 @@ func main() {
 	dy := ceil(b.Dy()/h, 4)
 	fh := b.Dy() / h * h
 
-	grayImg := grayScaleImg(img)
-	//writeImage(grayImg, "gray.png")
-	binImg := binaryImg(grayImg)
-	//writeImage(binImg, "binary.png")
+	binImg := binaryImg(grayScaleImg(img))
 
 	for y := b.Min.Y; y < fh; y += dy {
 		for x := b.Min.X; x < fw; x += dx {
 			fmt.Print(calcMoon(binImg, x, y, x+dx-1, y+dy-1))
 		}
 		fmt.Println()
+	}
+
+	webcam, err := gocv.VideoCaptureDevice(0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	window := gocv.NewWindow("Moonify")
+	camImg := gocv.NewMat()
+
+	for {
+		webcam.Read(&camImg)
+		window.IMShow(camImg)
+		window.WaitKey(1)
 	}
 }
 
