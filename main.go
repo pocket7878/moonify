@@ -3,7 +3,6 @@ package main // import "github.com/pocket7878/moonify"
 import (
 	"bufio"
 	"fmt"
-	"gocv.io/x/gocv"
 	"image"
 	"image/color"
 	"image/gif"
@@ -73,19 +72,6 @@ func main() {
 		}
 		fmt.Println()
 	}
-
-	webcam, err := gocv.VideoCaptureDevice(0)
-	if err != nil {
-		log.Fatal(err)
-	}
-	window := gocv.NewWindow("Moonify")
-	camImg := gocv.NewMat()
-
-	for {
-		webcam.Read(&camImg)
-		window.IMShow(camImg)
-		window.WaitKey(1)
-	}
 }
 
 func allOf(ary []int, p func(int) bool) bool {
@@ -118,48 +104,48 @@ func calcMoon(img *image.Gray, x0, y0, x1, y1 int) string {
 
 	if len(result) != 4 {
 		fmt.Fprintln(os.Stderr, x0, " ~ ", x1, " dx:", dx)
-		return "🌑"
+		return string(rune(0x1F311))
 	}
 
 	if allZero(result) {
-		return "🌑"
+		return string(rune(0x1F311))
 	}
 	if allZero(result[0:2]) && result[3] == 1 {
-		return "🌒"
+		return string(rune(0x1F312))
 	}
 	if result[0] == 0 && result[1] == 0 && allOne(result[2:]) {
-		return "🌓"
+		return string(rune(0x1F313))
 	}
 	if result[0] == 0 && allOne(result[1:]) {
-		return "🌔"
+		return string(rune(0x1F314))
 	}
 	if allOne(result) {
-		return "🌕"
+		return string(rune(0x1F315))
 	}
 	if allOne(result[0:2]) && result[3] == 0 {
-		return "🌖"
+		return string(rune(0x1F316))
 	}
 	if result[0] == 1 && result[1] == 1 && allZero(result[2:]) {
-		return "🌗"
+		return string(rune(0x1F317))
 	}
 	if result[0] == 1 && allZero(result[1:]) {
-		return "🌘"
+		return string(rune(0x1F318))
 	}
 	if result[0] == 1 && result[1] == 0 && result[2] == 1 && result[3] == 0 {
-		return "🌗"
+		return string(rune(0x1F317))
 	}
 	if result[0] == 1 && result[1] == 0 && result[2] == 1 && result[3] == 1 {
-		return "🌓"
+		return string(rune(0x1F313))
 	}
 	if result[0] == 0 && result[1] == 1 && result[2] == 0 && result[3] == 1 {
-		return "🌓"
+		return string(rune(0x1F313))
 	}
 	if result[0] == 1 && result[1] == 1 && result[2] == 0 && result[3] == 1 {
-		return "🌗"
+		return string(rune(0x1F317))
 	}
 
 	//一旦新月にする
-	return "🌑"
+	return string(rune(0x1F311))
 }
 
 func lightOrDark(img *image.Gray, x0, y0, x1, y1 int) int {
